@@ -1,0 +1,11 @@
+{extends list.latte}
+{block title}Editace zóny{/block}
+{block form}
+	<legend>Editace lokality:</legend>
+	{form zoneForm}
+	<table>
+		<tr><th>{label title /}</th><td>{input title}</td></tr>
+		<tr><th></th><td>{input update}</td></tr>
+	</table>
+	{/form}
+{/block}

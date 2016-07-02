@@ -1,0 +1,76 @@
+{var $robots = all}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+
+	<title>{block title|striptags}{/block} | Admin</title>
+
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/admin/admin.css?v=1.5">
+	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css?v=1.0">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+    <script src="{$basePath}/js/jquery.min.js"></script>
+    <script src="{$basePath}/js/netteForms.min.js"></script>
+    <script src="{$basePath}/js/admin.js"></script>
+	{block head}{/block}
+</head>
+
+<body>
+<div id="header">
+    <div id="header-inner">
+       	<a href="{$basePath}"><img src="{$basePath}/favicon-32x32.png" /></a>
+        <div class="main-menu">
+            <div id="admin-menu">
+                <a {ifCurrent Menu:*}class="current"{/ifCurrent} href="{link Menu:menu}">Menu</a>
+                <a {ifCurrent Preparation:*}class="current"{/ifCurrent} href="{link Preparation:list}">Preparace</a>
+                <a {ifCurrent Order:*}class="current"{/ifCurrent} href="{link Order:default}">Objednávky</a>
+                <a {ifCurrent Address:*}class="current"{/ifCurrent} href="{link Address:list}">Adresy</a>
+                <a {ifCurrent Cartage:*}class="current"{/ifCurrent} href="{link Cartage:list}">Rozvozy</a>
+                {*<a {ifCurrent Zone:* }class="current"{/ifCurrent} href="{link Zone:list}">Zóny</a>*}
+                <a {ifCurrent Overview:*}class="current"{/ifCurrent} href="{link Overview:default}">Přehled</a>
+            </div>
+          <span>|</span>
+            <div id="web-menu">
+                <a {ifCurrent Page:form, about}class="current"{/ifCurrent} href="{link Page:form, about}">O nás</a>
+                <a {ifCurrent Galery:*}class="current"{/ifCurrent} href="{link Galery:galery}">Galerie</a>
+            </div>
+        </div>
+        {if $user->isLoggedIn()}
+        <div class="user">      
+          <div class="loading">
+            <div class="circle"></div>
+            <div class="circle1"></div>
+          </div>
+          <span class="icon user">{$user->getIdentity()->fullname}</span> |
+          <!-- <a n:href="User:password">Změna hesla</a> | -->
+          <a n:href="signOut!">Odhlásit se</a>
+        </div>                  
+        {/if}
+    </div>
+</div>
+
+<div id="container">
+    {if empty($wide_layout)}
+    <div id="sidebar">
+        <div class="paraler-nav">
+        {block left-column}
+            <ul n:inner-foreach="$menu as $link => $title">
+                <li><a {ifCurrent Preparation:add}class="current"{/ifCurrent} n:href="$link">{$title}</a></li>
+            </ul>
+        {/block}
+        </div>             
+    </div>
+    {/if}
+    <div id="content" n:class="isset($wide_layout) ? wide">
+        <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+        {include #content}
+    </div>
+    <div id="footer">
+    </div>
+</div> 
+{block scripts}
+{/block}
+</body>
+</html>

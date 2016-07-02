@@ -1,0 +1,26 @@
+{block title}Editace kategorie{/block}
+{block content}
+<h1>Kategorie</h1>
+<fieldset id="categories">
+<legend>Kategorie:</legend>
+{foreach $categories as $category}
+    <div>
+        {$category->title}
+        <a class="remove" n:href="removeCategory!, $category->id"></a>
+        <a class="edit" n:href="editCategory, $category->id"></a>
+    </div>
+{/foreach}
+</fieldset>
+<fieldset id="new-category">
+<legend>Editace kategorie:</legend>
+{form categoryForm}
+<table>
+<tr><th>{label title /}</th><td>{input title}</td></tr>
+<tr><th></th><td>{input update}</td></tr>
+</table>
+{/form}
+</fieldset>
+<div class="backstop"></div>
+{/block}
+
+

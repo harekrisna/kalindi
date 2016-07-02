@@ -1,0 +1,74 @@
+{block title}Přidat objednávky{/block}
+{block left-column}
+{var $days_cz = ['Monday' => "Po", 'Tuesday' => "Út", 'Wednesday' => "St", 'Thursday' => "Čt", 'Friday' => "Pá", 'Saturday' => 'So', 'Sunday' => 'Ne']}
+<div id="paraler_paginator">
+	<a n:href="setOffset, $offset-1">&laquo; {$previous}</a>
+	<a n:href="setOffset, $offset+1" style="float: right">{$next} &raquo;</a>
+	<hr />
+</div>
+<ul id="days_nav">
+{foreach $dates as $day}
+    {? $day_name = date("l", $day['timestamp'])}
+    <li>
+    {if $day_name == 'Saturday' || $day_name == 'Sunday'}
+    	<div class="weekend">{$day['timestamp']|date:'%d.%m.%Y'}<div>{$days_cz[$day_name]}(-)</div></div>
+    {else}
+	    <a n:href="list, $day['date']">{$day['timestamp']|date:'%d.%m.%Y'}
+		    <div>{$days_cz[$day_name]}({$day['lunch_count'] == null ? 0 : $day['lunch_count']})</div>
+		</a>
+    {/if}
+    </li>
+{/foreach}
+</ul>
+{/block}
+{block content}
+<h1>Přidat objednávky</h1>
+<div id="insert_order_extended">
+{form insertOrderExtendedForm}
+<table>
+	<tr><th>{label person_name /}</th><td>{input person_name}</td></tr>
+	<tr><th>{label address /}</th><td>{input address}</td></tr>
+	<tr><th>{label phone /}</th><td>{input phone}</td></tr>
+	<tr><th>{label zone_id /}</th><td>{input zone_id}</td></tr>
+	<tr>
+		<td colspan="2">
+			<fieldset>
+				<legend>Tento týden: {input this_week_all}</legend>
+				<table>
+					<tr><th><div>{label this_week-monday /} Po:</div></th><td>{input this_week-monday}</td></tr>
+					<tr><th><div>{label this_week-tuesday /} Út:</div></th><td>{input this_week-tuesday}</td></tr>
+					<tr><th><div>{label this_week-wednesday /} St:</div></th><td>{input this_week-wednesday}</td></tr>
+					<tr><th><div>{label this_week-thursday /} Čt:</div></th><td>{input this_week-thursday}</td></tr>
+					<tr><th><div>{label this_week-friday /} Pá:</div></th><td>{input this_week-friday}</td></tr>
+				</table>
+			</fieldset>
+			<fieldset>
+				<legend>Příští týden: {input next_week_all}</legend>
+				<table>
+					<tr><th><div>{label next_week-monday /} Po:</div></th><td>{input next_week-monday}</td></tr>
+					<tr><th><div>{label next_week-tuesday /} Út:</div></th><td>{input next_week-tuesday}</td></tr>
+					<tr><th><div>{label next_week-wednesday /} St:</div></th><td>{input next_week-wednesday}</td></tr>
+					<tr><th><div>{label next_week-thursday /} Čt:</div></th><td>{input next_week-thursday}</td></tr>
+					<tr><th><div>{label next_week-friday /} Pá:</div></th><td>{input next_week-friday}</td></tr>
+				</table>
+			</fieldset>
+		</td>
+	</tr>
+	<tr><td colspan="2">{input insert}</td></tr>
+</table>
+
+{/form}
+</div>
+
+{/block}
+{block scripts}
+{include parent}
+  <script> 
+	  $('legend input').on('keyup change', function(evt) {
+		  var count = $(this).val();
+		  var inputs = $(this).closest('fieldset').find('table input:enabled');
+		  inputs.val(count);
+	  });
+  </script>
+{/block}
+

@@ -1,0 +1,39 @@
+{block title}Alergeny{/block}
+{block left-column}
+{/block}
+{block content}
+<h1>Lokality</h1>
+<table id="zones" class="view">
+    <thead>
+      <tr>
+        <th style="width: 200px"><span>Lokalita</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr n:foreach="$zones as $zone">
+            <td>{$zone['title']}</td>
+            <td><a class="remove" n:href="removeZone!, $zone->id"></a><a class="edit" n:href="editZone, $zone->id"></a></td>
+        </tr>
+    </tbody>
+</table>
+<fieldset class="form">
+{block form}
+	<legend>Nová lokalita:</legend>
+	{form zoneForm}
+	<table>
+		<tr><th>{label title /}</th><td>{input title}</td></tr>
+		<tr><th></th><td>{input insert}</td></tr>
+	</table>
+	{/form}
+{/block}
+</fieldset>
+{/block}
+{block scripts}
+{include parent}
+<script>
+$('#zones .remove').click(function() {
+	return window.confirm("Opravdu smazat?") !== false;
+});
+</script>
+{/block}

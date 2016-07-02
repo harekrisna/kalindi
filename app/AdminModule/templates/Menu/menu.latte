@@ -1,0 +1,373 @@
+{block title}Menu{/block}
+{block content}
+<h1>Nastavení menu</h1>
+<fieldset id="preparations">
+<legend>
+<div>Preparace:</div>
+{form changeCategoryForm}
+{input category_id}
+{/form}
+</legend>
+{snippet preparations}
+{foreach $preparations as $preparation}
+    <div class="preparation-bar" data-id="{$preparation['id']}">
+	    <span>{$preparation['title']}</span>
+	    <div>{$preparation['last_date']|date:'d.m.y'} (<i>{$preparation['count_in_menu']}</i>)</div>
+	</div>
+{/foreach}
+{/snippet}
+</fieldset>
+<fieldset id="menu">
+<legend>Menu{*<div n:snippet="diet_button"><button onclick="window.open({link diet, $week_offset}, 'Jídelníček', 'width=1000, height=750, scrollbars=no').focus();">Zobrazit jídelníček</button></div>*}</legend>
+    <table n:snippet="menu">
+        <tr>
+            <td colspan="3" id="week_navigation">
+                <a id="prev_week" n:href="updateWeek!, $week_offset-1">předchozí týden</a>
+                <span>{$week_title}</span>
+                <a id="next_week" n:href="updateWeek!, $week_offset+1">další týden</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="day">Pondělí {$lunch['monday']['date']|date:'%d.%m.%Y'}</div>
+                <input type="checkbox" id="monday_cook" value="{$lunch['monday']['date']}" {if $lunch['monday']['nocook']}checked {/if}/>
+                <label for="monday_cook" name="monday_cook">nevaříme</label>
+            </td>
+            <td n:snippet="monday">
+                <ul{if $lunch['monday']['nocook']} class="nocook"{/if}>
+                   <li n:snippet="monday_1">
+                     {var $title = $lunch['monday']['preparation'][1]}
+                     <div data-lunch_date="{$lunch['monday']['date']}" data-position="1" data-day="monday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['monday']['id'], 1, 'monday'"></a>
+                     {/if}
+                     </div>                     
+                   </li>
+                   <li n:snippet="monday_2">
+                     {var $title = $lunch['monday']['preparation'][2]}
+                     <div data-lunch_date="{$lunch['monday']['date']}" data-position="2" data-day="monday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['monday']['id'], 2, 'monday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="monday_3">
+                     {var $title = $lunch['monday']['preparation'][3]}
+                     <div data-lunch_date="{$lunch['monday']['date']}" data-position="3" data-day="monday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['monday']['id'], 3, 'monday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="monday_4">
+                     {var $title = $lunch['monday']['preparation'][4]}
+                     <div data-lunch_date="{$lunch['monday']['date']}" data-position="4" data-day="monday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['monday']['id'], 4, 'monday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="day">Úterý {$lunch['tuesday']['date']|date:'%d.%m.%Y'}</div>
+                <input type="checkbox" id="tuesday_cook" value="{$lunch['tuesday']['date']}" {if $lunch['tuesday']['nocook']}checked {/if}/>
+                <label for="tuesday_cook" name="tuesday_cook">nevaříme</label>
+            </td>
+            <td n:snippet="tuesday">
+                <ul{if $lunch['tuesday']['nocook']} class="nocook"{/if}>
+                   <li n:snippet="tuesday_1">
+                     {var $title = $lunch['tuesday']['preparation'][1]}
+                     <div data-lunch_date="{$lunch['tuesday']['date']}" data-position="1" data-day="tuesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['tuesday']['id'], 1, 'tuesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="tuesday_2">
+                     {var $title = $lunch['tuesday']['preparation'][2]}
+                     <div data-lunch_date="{$lunch['tuesday']['date']}" data-position="2" data-day="tuesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['tuesday']['id'], 2, 'tuesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="tuesday_3">
+                     {var $title = $lunch['tuesday']['preparation'][3]}
+                     <div data-lunch_date="{$lunch['tuesday']['date']}" data-position="3" data-day="tuesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['tuesday']['id'], 3, 'tuesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="tuesday_4">
+                     {var $title = $lunch['tuesday']['preparation'][4]}
+                     <div data-lunch_date="{$lunch['tuesday']['date']}" data-position="4" data-day="tuesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['tuesday']['id'], 4, 'tuesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                </ul>
+            </td>
+        </tr>
+                <tr>
+            <td>
+                <div class="day">Středa {$lunch['wednesday']['date']|date:'%d.%m.%Y'}</div>
+                <input type="checkbox" id="wednesday_cook" value="{$lunch['wednesday']['date']}" {if $lunch['wednesday']['nocook']}checked {/if}/>
+                <label for="wednesday_cook" name="wednesday_cook">nevaříme</label>
+            </td>
+            <td n:snippet="wednesday">
+                <ul{if $lunch['wednesday']['nocook']} class="nocook"{/if}>
+                   <li n:snippet="wednesday_1">
+                     {var $title = $lunch['wednesday']['preparation'][1]}
+                     <div data-lunch_date="{$lunch['wednesday']['date']}" data-position="1" data-day="wednesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['wednesday']['id'], 1, 'wednesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="wednesday_2">
+                     {var $title = $lunch['wednesday']['preparation'][2]}
+                     <div data-lunch_date="{$lunch['wednesday']['date']}" data-position="2" data-day="wednesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['wednesday']['id'], 2, 'wednesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="wednesday_3">
+                     {var $title = $lunch['wednesday']['preparation'][3]}
+                     <div data-lunch_date="{$lunch['wednesday']['date']}" data-position="3" data-day="wednesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['wednesday']['id'], 3, 'wednesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="wednesday_4">
+                     {var $title = $lunch['wednesday']['preparation'][4]}
+                     <div data-lunch_date="{$lunch['wednesday']['date']}" data-position="4" data-day="wednesday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['wednesday']['id'], 4, 'wednesday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                </ul>
+            </td>
+        </tr>        
+        <tr>
+            <td>
+                <div class="day">Čtvrtek {$lunch['thursday']['date']|date:'%d.%m.%Y'}</div>
+                <input type="checkbox" id="thursday_cook" value="{$lunch['thursday']['date']}" {if $lunch['thursday']['nocook']}checked {/if}/>
+                <label for="thursday_cook" name="thursday_cook">nevaříme</label></td>
+            <td n:snippet="thursday">
+                <ul{if $lunch['thursday']['nocook']} class="nocook"{/if}>
+                   <li n:snippet="thursday_1">
+                     {var $title = $lunch['thursday']['preparation'][1]}
+                     <div data-lunch_date="{$lunch['thursday']['date']}" data-position="1" data-day="thursday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['thursday']['id'], 1, 'thursday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="thursday_2">
+                     {var $title = $lunch['thursday']['preparation'][2]}
+                     <div data-lunch_date="{$lunch['thursday']['date']}" data-position="2" data-day="thursday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['thursday']['id'], 2, 'thursday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="thursday_3">
+                     {var $title = $lunch['thursday']['preparation'][3]}
+                     <div data-lunch_date="{$lunch['thursday']['date']}" data-position="3" data-day="thursday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['thursday']['id'], 3, 'thursday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="thursday_4">
+                     {var $title = $lunch['thursday']['preparation'][4]}
+                     <div data-lunch_date="{$lunch['thursday']['date']}" data-position="4" data-day="thursday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['thursday']['id'], 4, 'thursday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                </ul>
+            </td>
+        </tr>        
+        <tr>
+            <td>
+                <div class="day">Pátek {$lunch['friday']['date']|date:'%d.%m.%Y'}</div>
+                <input type="checkbox" id="friday_cook" value="{$lunch['friday']['date']}" {if $lunch['friday']['nocook']}checked {/if}/>
+                <label for="friday_cook" name="friday_cook">nevaříme</label>
+            </td>
+            <td n:snippet="friday">
+                <ul{if $lunch['friday']['nocook']} class="nocook"{/if}>
+                   <li n:snippet="friday_1">
+                     {var $title = $lunch['friday']['preparation'][1]}
+                     <div data-lunch_date="{$lunch['friday']['date']}" data-position="1" data-day="friday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['friday']['id'], 1, 'friday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="friday_2">
+                     {var $title = $lunch['friday']['preparation'][2]}
+                     <div data-lunch_date="{$lunch['friday']['date']}" data-position="2" data-day="friday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['friday']['id'], 2, 'friday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="friday_3">
+                     {var $title = $lunch['friday']['preparation'][3]}
+                     <div data-lunch_date="{$lunch['friday']['date']}" data-position="3" data-day="friday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['friday']['id'], 3, 'friday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                   <li n:snippet="friday_4">
+                     {var $title = $lunch['friday']['preparation'][4]}
+                     <div data-lunch_date="{$lunch['friday']['date']}" data-position="4" data-day="friday" n:class="$title == '' ? empty">&nbsp;
+                     {if $title != ""}
+                        <span>{$title}</span><a class="remove" n:href="removeLunchPreparation!, $lunch['friday']['id'], 4, 'friday'"></a>
+                     {/if}
+                     </div>
+                   </li>
+                </ul>
+            </td>
+        </tr>
+    </table>  
+</fieldset>
+{/block}
+{block scripts}
+{include parent}
+  <script src="{$basePath}/js/jquery-ui.min.js"></script>
+  <script>
+
+  $('#menu, #preparations').css('height', ($(window).height()-130));
+  $(window).resize(function () {   
+    $('#menu, #preparations').css('height', ($(window).height()-130)); 
+  });
+
+  $('select[name=category_id]').change(function(event) {
+     var category_id = $(this).val();
+     var url = $(this).closest('form').attr('action');
+     $('div.loading').fadeIn(300); 
+     $('#preparations > div').fadeOut(200);
+     event.preventDefault();
+     $.get({link changeCategory!}, { "category_id": category_id },
+     function (payload) {
+         $.nette.success(payload);
+         bindPreparationBar();
+         $('#preparations > div').fadeIn(200);
+     });
+  });
+
+function bindPreparationBar() {
+  $("#preparations > div > div").draggable({ cursor: "move", 
+                                     revert: "invalid", 
+                                     snap: "#menu ul:not(.nocook) li > div", 
+                                     snapMode: "inner",
+                                     helper: 'clone',
+                                     opacity: 0.7,
+                                     scroll: true,
+                                  });
+}
+                             
+function bindEvents(snippet_name) {
+  if (typeof snippet_name === 'undefined') {
+    selector = "#menu ul:not(.nocook) li";
+  }
+  else {
+    selector = "#snippet--" + snippet_name;
+  }  
+
+  $(selector + " > div").droppable({
+      hoverClass: "hover",
+      drop: function( event, ui ) {
+          $('div.loading').fadeIn(300);
+          $(this).addClass("row_loading");
+          var pre_id = ui.draggable.data("id");
+          var lunch_date = $(this).data("lunch_date");
+          var position = $(this).data("position");
+          var day = $(this).data("day");
+          $.get({link setLunchPreparation!}, { "lunch_date": lunch_date, 
+                                               "preparation_id": pre_id, 
+                                               "position": position,
+                                               "day": day },
+          function (payload) {
+              $.nette.success(payload);    // standartní nette obsluha snippetu
+              bindEvents(payload.snippet); // nabindovani udalosti noveho snippetu
+              if(typeof payload.snippet_old_pos != 'undefined') { // doslo ke smazani preparace z puvodiho mista nuto rebindovat i v puvodnim miste (asi udelat jinak pak)
+                 bindEvents(payload.snippet_old_pos);
+              }
+          });
+      }
+  }); 
+    
+  $(selector + " a.remove").click(function (event) {    
+      $('div.loading').fadeIn(300);
+      event.preventDefault();
+      $.get(this.href,"" ,
+      function (payload) {
+          $.nette.success(payload);
+          bindEvents(payload.snippet);
+      });
+  });
+}
+  
+  function bindWeekNavigationEvents () {
+    $('#week_navigation').on('click', 'a', function (event) {
+       var link = this.href;
+       $('div.loading').fadeIn(300);
+       $('table#snippet--menu').fadeOut(200);
+       event.preventDefault();
+       setTimeout(function() {
+           $.get(link, function(payload) {
+               $.nette.success(payload);
+               bindEvents();
+               bindWeekNavigationEvents();
+               bindChangeCookFlagChceckboxes();
+               $('table#snippet--menu').fadeIn(200);
+           });
+       }, 200);
+    });
+  }
+
+  function bindChangeCookFlagChceckboxes() {
+     $('input[type=checkbox]').change(function() {
+         if(this.checked) {
+             var date = this.value;
+             $.get({link changeCookFlag!}, { "lunch_date": date,
+                                             "nocook_flag": 1 },
+             function (payload) {
+                $.nette.success(payload);
+                bindEvents();
+             });
+         }
+         else {
+             var date = this.value;
+             $.get({link changeCookFlag!}, { "lunch_date": date,
+                                             "nocook_flag": 0 },
+             function (payload) {
+                $.nette.success(payload);
+                bindEvents();
+             });
+         }
+     });
+  }
+
+  bindWeekNavigationEvents ();
+  bindEvents(); 
+  bindPreparationBar();   
+  bindChangeCookFlagChceckboxes();
+  
+  </script>
+{/block}
+
+

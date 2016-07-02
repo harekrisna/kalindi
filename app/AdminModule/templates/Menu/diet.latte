@@ -1,0 +1,210 @@
+{block title}Jídelníček{/block}
+{block head}
+<style type="text/css">
+@page {
+  size: auto;
+  margin: 45px 20px 65px 20px;
+}
+
+body {
+  background-image: url("/images/background.jpg"); 
+  background-repeat: repeat;
+  background-position: center top;
+  background-size: 200px;
+  -webkit-print-color-adjust:exact;
+}
+
+#diet {
+	width: 1010px;
+	height: 648px;
+	margin: 0 auto;
+}
+
+#diet > img {
+	margin: 30px 60px;
+}
+
+#menu-box {
+	width: 630px;
+	height: 520px;
+	background-color: #FFFFFF;
+	margin-left: 40px;
+	text-align: center;
+	box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
+	float: left;
+}
+
+#menu-box table {
+    width: 600px;    
+    height: 440px;
+    border-collapse: collapse;
+    margin-left: 10px;
+}
+
+#menu-box table tr {
+    height: 73px !important;
+}
+
+#menu-box table td:first-child {
+    width: 80px;
+}
+
+#menu-box table span {
+    font-size: 16px;
+    color: #663200;
+    margin-left: -190px;
+}
+
+#menu-box table div {
+  	width: 40px;
+  	height: 32px;
+  	color: #FFFFFF;
+  	font-size: 18px;
+  	border-radius: 150px;
+  	padding: 8px 0px 0px 1px;
+  	text-align: center;
+  	display: block;
+  	float: left;
+  	background-color: #999933;
+  	margin-left: 25px;
+}
+
+#menu-box ul {
+    padding-left: 25px;
+    float: left;
+    margin: 0px;
+}
+
+#menu-box ul li {
+    color: #663200;
+    text-align: left;
+    list-style: disc;
+    font-size: 15px; 
+}
+
+h1 {
+    font-size: 20px;
+    display: block; 
+    float: left;
+    color: #ff9933;
+    font-weight: normal;
+    border: 0px;
+    width: 550px;
+    margin: 25px 0px 10px 0px;
+}
+
+#panel {
+	width: 250px;
+	height: 520px;	
+	float: left;
+	margin-left: 30px;
+}
+
+#panel p {
+	color: #663200;
+	font-weight: bold;
+	margin: 0px 0px 5px 10px;
+	font-size: 16px;
+}
+
+#orders, #pb, #mahamantra {
+	width: 100%;
+}
+
+#orders {
+	height: 220px;
+}
+
+#orders span {
+    font-size: 30px;
+    display: block; 
+    color: #ff9933;
+    margin: 10px;
+}
+
+#pb {
+	height: 65px;
+	border-top: 2px #663200 dotted;
+	border-bottom: 2px #663200 dotted;
+	padding: 30px 0px 40px 0px;
+}
+
+#pb img {
+	margin: 3px 10px;	
+	width: 200px;
+}
+
+#mahamantra {
+	height: 100px;
+}
+
+#mahamantra p{
+	font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    line-height: 24px;
+    text-align: justify;
+    padding: 30px 20px 0px 8px;
+}
+
+#mahamantra span {
+	color: transparent;
+}
+
+
+
+</style>
+{/block}  
+{block content}
+<div id="diet">
+	<img src="{$basePath}/images/head-logo.png" />
+	<div id="menu-box">
+	    <h1>{$week_title}</h1>
+		<table>
+        {foreach $lunch as $day}
+        	<tr>
+            	<td><div>{$day['abbr']}</div></td>
+                <td>
+                    {if $day['nocook']}
+                        <span>nevaříme</span>
+                    {else}
+                        <ul>
+                        {foreach $day['preparation'] as $preparation}
+                            <li n:tag-if="$preparation != ''">{$preparation}</li>
+                        {/foreach}
+                        </ul>
+                    {/if}
+                    </td>
+                </tr>
+                {/foreach}
+         </table>     
+	</div>
+	<div id="panel">
+		<div id="orders">
+			<span>Objednávky</span>
+			<p>
+				Brno Centrum<br />
+				+420 774 694 075
+			</p>
+			<p>
+				Brno<br />
+				+420 603 564 978
+			</p>
+			<p>
+				rozvoz@madanmohan.cz
+			</p>
+			<p>
+				a na madanmohan.cz
+			</p>
+		</div>
+		<div id="pb">
+          <p>Projekt zajišťuje</p>
+          <img src="{$basePath}/images/pb-logo.png" alt="logo" />
+          <p>prabhupadbhavan.cz</p>
+		</div>
+		<div id="mahamantra">
+			<p>Haré Kršna Haré Kršna Kršna Kršna Haré Haré Haré Ráma Haré Ráma Ráma Ráma Haré Haré <span>pading</span></p>
+		</div>
+	</div>
+</div>
+{/block}

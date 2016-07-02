@@ -1,0 +1,63 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 8pt;
+	color: black;
+	background: none;
+	width: 100%;
+}
+
+a img { border: none; }
+
+table.printout {
+	width: 800px;
+	padding: 0;
+	margin-bottom: 20px;
+	border-spacing: 0;
+}
+
+.printout tr td {
+	border-top: 1px black solid;
+	border-left: 1px black solid;
+}
+
+
+.printout tr td:last-child {
+	border-right: 1px black solid;
+}
+
+.printout tr:nth-child(even) td {
+	background-color: #DEDEDE;	
+}
+
+.printout tr.last td {
+    background-color: #ffffff;
+    border: 0 none;
+    font-weight: bold;
+    text-align: center;
+    border-top: 1px black solid;
+}
+
+.printout tr td:nth-child(1), .printout tr td:nth-child(3), .printout tr td:nth-child(4), .printout tr td:nth-child(6), .printout tr td:nth-child(7), .printout tr td:nth-child(8) {
+	text-align: center;
+}
+
+.printout tr td:nth-child(2), .printout tr td:nth-child(5){
+	padding-left: 5px;
+}
+
+#lunch_sum {
+	width: 785px;
+	text-align: right;
+	margin: auto;
+	margin-top: 15px;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+input {
+	display: none;
+}
+
+#ajax-spinner {
+	display: none;
+}

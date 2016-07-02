@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>{ifset title}{include title|striptags} | {/ifset}Kálindí</title>
+	<link rel="stylesheet" href="{$basePath}/css/style.css?v=1.2">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+	<meta name="viewport" content="width=device-width">
+    <link rel="apple-touch-icon" sizes="57x57" href="{$basePath}/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="{$basePath}/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{$basePath}/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{$basePath}/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{$basePath}/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{$basePath}/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="{$basePath}/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{$basePath}/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{$basePath}/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="{$basePath}/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="{$basePath}/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="{$basePath}/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="{$basePath}/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="{$basePath}/manifest.json">
+    <link rel="mask-icon" href="{$basePath}/safari-pinned-tab.svg" color="#000000">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="{$basePath}/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+	{block head}
+	<script>
+        (function(i,s,o,g,r,a,m){
+            i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        
+        ga('create', 'UA-69103501-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+	{/block}
+</head>
+
+<body>
+	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message|noescape}</div>
+    <div id="container">
+        <header>
+            <img id="logo" draggable="false" src="{$basePath}/images/layout/logo.svg" />
+            <img id="title" src="{$basePath}/images/layout/title.svg" />
+            <div id="subtitle">Rozvážíme obědy v Prostějově a okolí</div>
+        </header>
+        <nav>
+            <a n:href="Page:about" {ifCurrent Page:about}class="active" {/ifCurrent}>O nás</a>
+            <a n:href="Order:menu" {ifCurrent Order:menu}class="wide active" {else}class="wide" {/ifCurrent}>Týdenní menu</a>
+            <a n:href="Page:galery" {ifCurrent Page:galery}class="active" {/ifCurrent}>Galerie</a>
+            <a n:href="Order:order" {ifCurrent Order:order}class="active" {/ifCurrent}>Objednat</a>
+            <a n:href="Page:contact" {ifCurrent Page:contact}class="active" {/ifCurrent}>Kontakt</a>
+        </nav>
+        <main>
+        {include content}
+        </main>
+        <div id="delimiter"></div>
+        <footer>
+            <div id="social_links">
+                <div>Sdílet:</div>
+                <a href="http://www.facebook.com/sharer.php?u=http://www.kalindi.cz" target="_blank" class="facebook"></a>
+                <a href="http://twitter.com/share?url=http://www.kalindi.cz" target="_blank" class="twitter"></a>
+                <a href="http://plus.google.com/share?url=http://www.kalindi.cz" target="_blank" class="google"></a>
+            </div>
+            <div id="public_info">
+                <p>© 2015 KALINDI<br />
+Provozovatel, fakturační údaje:<br />
+Elena Králová, IČ: 04427491, Drahany 182, 798 61,<br />
+Tel: +420 / 732 927 365, Email: kalindi@kalindi.cz<br />
+Provozovna: Drahany 154, 798 61</p>
+            </div>
+        </footer>
+    </div>
+	{block scripts}
+	{/block}
+</body>
+</html>

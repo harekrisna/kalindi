@@ -1,0 +1,317 @@
+section#order {
+    width: 885px;
+    height: 520px;
+    background-color: rgba(234, 212, 183, 0.5);
+    -webkit-box-shadow: 0 8px 18px -6px rgba(234, 212, 183, 1), 0 -8px 18px -6px rgba(234, 212, 183, 1);
+    -moz-box-shadow: 0 8px 18px -6px rgba(234, 212, 183, 1), 0 -8px 18px -6px rgba(234, 212, 183, 1);
+    box-shadow: 0 8px 18px -6px rgba(234, 212, 183, 1), 0 -8px 18px -6px rgba(234, 212, 183, 1);
+    overflow: hidden;
+
+    h1 {
+        font-size: 32px;
+        font-weight: normal;
+        margin: 0 0 15px 50px;
+    }
+    
+    div.week-navigation {
+        font-size: 30px;
+    	width: calc(inherit - 40px);
+    	height: 45px;
+    	margin-left: 30px;
+    	margin-bottom: 20px;
+
+    	div.button {
+        	height: 51px;
+            float: left;
+            padding: 0 40px 0 30px;
+            background: url("../images/order/button-plain.png") no-repeat center center / 100% 51px;
+            
+        	a { 
+            	line-height: 51px;
+            	color: @webMainColor;
+            	color: #FFFFFF;
+
+            	&.disabled { 
+                	color: @webMainColor;
+                }
+            }
+            
+            &.actual {
+                background: none;
+            }
+        }
+        
+        div.triangle {
+        	margin: 0 15px;
+            float: left;
+            .transition(transform, 0.5s);
+        }
+        
+        div.triangle-left:before {
+            content: "<";
+            .transition(transform, 0.5s);
+        }
+        
+        
+        div.triangle-right:before {
+            content: ">";
+            .transition(transform, 0.5s);
+        }
+
+        div.rotate-triangle {
+            .transition(transform, 0.5s);
+            transform: scaleX(-1);
+            -moz-transform: scaleX(-1);
+            -o-transform: scaleX(-1);
+            -webkit-transform: scaleX(-1);
+            -ms-filter: "FlipH";
+        }
+    }
+    
+    .bx-wrapper {
+        margin-left: 20px !important;
+        margin-bottom: 10px !important;
+        float: left;
+        
+        ul#order_container {
+            margin: 0;            
+            li {
+                 list-style: none;
+            }
+        }
+    }    
+}
+
+
+ul#order_container {
+    list-style: none;
+}
+
+
+
+table.order-table {
+    font: 15px 'Trebuchet MS';
+   	width: 600px;
+	border-collapse: collapse;
+	margin-left: -20px;
+	float: left;
+	
+	tr {
+        height: 90px;
+    	border-top: 1px @webMainColor solid;
+	}
+	
+    td.day-circle{ 
+        width: 55px; 
+        
+        div {
+            font-size: 30px;
+            text-align: center;
+            line-height: 62px;
+            width: 60px;
+            height: 62px;
+            
+            &.today {
+                background-image: url('../images/order/today.png');
+                background-size: 60px 62px;
+                background-position: center center;
+            }
+        }
+    }
+    
+    td {    
+        ul {
+            padding-left: 20px;
+            padding-bottom: 2px;
+            float: left;
+            
+            li {
+                list-style: disc;
+                cursor: help;
+                padding-left: 3px;
+                .transition(all, 0.1s);
+            }
+            
+            li:hover {
+                margin: -1px 1px 1px -1px;
+                text-shadow: 1px 1px 2px rgba(226, 143, 0, 0.5);
+                .transition(all, 0.1s);
+
+            }
+        }
+                
+        span.nocook{
+            margin-left: 30px;
+            font-size: 20px;
+        }
+    }
+    
+    td.count {
+        width: 77px;
+
+        div.cross {
+            font-size: 14px;
+            vertical-align: bottom;
+            height: 65px;
+            background: url('../images/order/cross.png') 0px 15px no-repeat;
+            background-size: 30px 30px;
+            display: table-cell;            
+        }
+        
+        
+        div.count-text {
+            height: 23px;
+        }
+        
+        input{
+            width: 25px;
+            height: 30px; 
+            border:solid 0px #FFFFFF; 
+            background-color: #FFFFFF;
+            padding-left: 5px;
+            float: left;
+            .drop-shadow(0, 0, 4px, 0, 0.50);
+        }
+        
+        div.arrow-increase {
+        	width: 17px;
+        	clear: right;
+        	height: 12px;
+            background: url("../images/order/arrow-up.svg");
+            margin-left: 40px;
+        }
+        
+        div.arrow-increase:hover {
+        	cursor: pointer;
+        }
+        
+        div.arrow-decrease {    
+        	width: 17px;
+        	height: 13px;
+        	margin-top: 5px;
+            background: url("../images/order/arrow-down.svg");
+            margin-left: 40px;
+        }
+        
+        div.arrow-decrease:hover {
+        	cursor: pointer;
+        }        
+        
+        div.price {
+            margin-top: 7px;
+        }
+    }    
+}
+
+div#order_form_container {
+    width: 215px;
+    height: 400px;
+    margin-right: 20px;
+    float: right;
+    
+    div#order-title {
+        width: 217px;
+        height: 51px;
+        font-size: 30px;
+        text-align: center;
+        line-height: 51px;
+        background: url("../images/order/button-plain.png") no-repeat center center / 217px 51px;
+        margin-left: -2px;
+    }
+    
+    div#sum {
+        height: 54px;
+        margin-top: 18px;
+        margin-bottom: 10px;
+        
+        div { 
+            height: inherit; 
+            float: left;
+        }
+
+        div#text { 
+            font: 22px 'Trebuchet MS';
+            text-transform: uppercase;
+            width: 80px; 
+        }
+        
+        div#label {
+            font: 30px 'Trebuchet MS';
+            text-align: center;
+            color: #FFFFFF;
+            width: 120px;
+            background: url("../images/order/sum-price-bg.png") no-repeat center center / 120px 51px;
+            margin-left: 7px;
+            
+            span { line-height: 55px }
+        }
+    }
+    
+    input[type=text], input[type=email] {
+        width: 200px;
+        height: 25px;
+        font: 16px 'Trebuchet MS';
+        margin-bottom: 6px;
+        padding-left: 5px;
+        .drop-shadow(0, 0, 6px, 1px, 0.20);
+    }
+    
+    input[type=checkbox] {
+        font-size: 16px;
+        width: 18px; 
+        height: 18px;
+        margin: 5px 2px 0 0;
+        float: left;
+        .drop-shadow(0, 0, 6px, 1px, 0.20);
+    }
+    
+    label {
+        font: 14px 'Trebuchet MS';
+        line-height: 10px;
+        vertical-align: middle;        
+    }
+    
+    input[type=submit] {   
+        width: 217px;
+        height: 51px;
+        font-size: 30px;
+        text-align: center;
+        line-height: 51px;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        background: url("../images/order/button-plain.png") no-repeat center center / 217px 51px;
+        border: 0;
+        margin: 10px 0 0 -2px;
+    }
+}
+
+div#allergen_info {
+    font-size: 22px;
+    line-height: 40px;
+    background: url("../images/order/info-arrow.svg") no-repeat left top;
+    margin: 0 0 10px 20px;
+    padding-left: 40px;
+    
+    
+}
+
+div#footnote {
+    width: inherit;
+    height: 115px;
+    font-size: 21px;
+    text-align: center;
+    line-height: 27px;
+    background: url("../images/order/ornament.png") no-repeat,
+                url("../images/order/ornament.png") no-repeat,
+                url("../images/order/footer-bg.png") no-repeat;
+
+    background-position: 25px 21px,
+                         780px 21px,
+                         center center;
+
+    background-size: 86px 81px,
+                     86px 81px,
+                     883px 126px;
+    padding-top: 5px;
+    clear: both;    
+}

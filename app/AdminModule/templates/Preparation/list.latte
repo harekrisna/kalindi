@@ -1,0 +1,40 @@
+{extends ../@layout.latte}
+{block title}Preparace{/block}
+{block content}
+<h1>Preparace</h1>
+<fieldset id="preparations-list">
+<legend>
+<div>Kategorie:</div>
+{form chooseCategoryForm}
+{input category_id}
+{/form}
+</legend>
+{foreach $preparations as $preparation}
+    <div data-id="{$preparation->id}">
+        {$preparation->title}
+        <a class="remove" n:href="removePreparation!, $preparation->id"></a>
+        <a class="edit" n:href="editPreparation, $preparation->id"></a>
+    </div>
+{/foreach}
+</fieldset>
+{block form}
+{form preparationForm}
+	<fieldset id="new-preparation">
+	<legend>Nová preparace:</legend>
+	<table>
+	<tr><th>{label title /}</th><td>{input title}</td></tr>
+	<tr><th></th><td>{input insert}</td></tr>
+	</table>
+	</fieldset>
+	<fieldset id="allergen-form" class="chcekboxlist-form">
+	<legend>{label allergens /}</legend>
+		{input allergens}
+	</fieldset>
+	<fieldset id="categories-form" class="chcekboxlist-form">
+	<legend>{label categories /}</legend>
+		{input categories}
+	</fieldset>
+{/form}
+{/block}
+<div class="backstop"></div>
+{/block}

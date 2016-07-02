@@ -1,0 +1,11 @@
+	<div id="{$photo->id}">
+    	{var @filesize = filesize("./galery/photos/".$photo->file)}
+        <a onclick="removePhoto(event, this);" n:href="removePhoto!, $photo->id">Smazat fotku</a>
+        <div class="move"></div>
+        <span class="dimensions">{$photo->width}x{$photo->height}</span>
+        <div class="info">{$photo->file} [<span>{$filesize|bytes}</span>]</div>
+        <div class="box">
+            <img alt="{$photo->file}" title="{$photo->file}" src="{$basePath}/galery/thumbs/{$photo->file}" />
+        </div>
+        <input type="text" value="{$photo->description}" onchange="saveDescription({$photo->id}, $(this).val())" placeholder="Popis" />
+	</div>

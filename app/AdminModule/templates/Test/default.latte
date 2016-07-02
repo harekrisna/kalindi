@@ -1,0 +1,16 @@
+{block title}Test{/block}
+{block content}
+<table id="printout">
+{foreach $orders as $order}
+<tr>
+	<td>{$order->order_data->person_name}</td>
+	<td>{$order->order_data->address}</td>
+	<td>{$order->order_data->phone}</td>
+	<td>{ifset $order->cartage->cartage_name}{$order->cartage->abbreviation}{/ifset}</td>
+</tr>
+{/foreach}
+</table>
+{/block}  
+
+
+

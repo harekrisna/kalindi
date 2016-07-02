@@ -1,0 +1,31 @@
+{extends overview.latte}
+{block tableList}
+<table id="full_list" class="view">
+    <thead>
+      <tr>
+        <th style="width: 40px;"><span>Datum</span></th>	      
+        <th style="width: 300px;"><span>Jméno</span></th>
+        <th><span>Adresa</span></th>
+        <th style="width: 100px"><span>Email</span></th>
+        <th style="width: 30px"><span>Počet</span></th>
+      </tr>
+    </thead>
+    <tbody>
+    {foreach $groups as $group}
+	    {foreach $group['orders'] as $order}
+	        <tr id="{$order->id}">
+	            <td>{$order->lunch->lunch_date|date:'%d.%m'}</td>
+	            <td><div>{$order->person_name|truncate:40}</div></td>
+	            <td><div>{$order->address|truncate:50}</div></td>
+				<td><div>{$order->email}</div></td>
+	            <td><div>{$order->lunch_count}</div></td>
+	        </tr>        
+	    {/foreach}
+    	<tr class="sum_row">
+	    	<td colspan="4"></td>
+	    	<td class="number">{$group['orders']->sum('lunch_count')}</td>
+	    </tr>
+    {/foreach}
+    </tbody>
+</table>
+{/block}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>{block title|striptags}{/block}</title>
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/admin.css">
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/jquery-ui.css">
+	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico?v=3">
+    <script src="{$basePath}/js/jquery.min.js"></script>
+    <script src="{$basePath}/js/jquery-ui.min.js"></script>
+    {block head}{/block}
+</head>
+<body>
+    {include #content}
+</body>
+</html>

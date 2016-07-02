@@ -1,0 +1,43 @@
+{extends ../@layout.latte}
+{block title}Adresy rozvozů{/block}
+{block left-column}
+{/block}
+{block content}
+<h1>Rozvozy</h1>
+<table id="cartage" class="view">
+    <thead>
+      <tr>
+        <th style="width: 40px;" class="no-padding"><span>Id</span></th>
+        <th><span>Jméno</span></th>
+        <th style="width: 100px;" class="no-padding"><span>Zkratka</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+	{foreach $cartages as $cartage}
+        <tr>
+            <td class="center">{$cartage->id}</td>
+            <td>{$cartage->cartage_name}</td>
+            <td class="center">{$cartage->abbreviation}</td>
+            <td><a class="remove" n:href="remove!, $cartage->id"></a><a class="edit" n:href="edit, $cartage->id"></a></td>
+        </tr>
+    {/foreach}
+    </tbody>
+</table>
+<fieldset class="form">
+{block form}
+	<legend>Nový rozvozce:</legend>
+	{form cartageForm}
+	<table>
+		<tr><th>{label data-cartage_name /}</th><td>{input data-cartage_name}</td></tr>
+		<tr><th>{label data-abbreviation /}</th><td>{input data-abbreviation}</td></tr>
+		<tr><th></th><td>{input insert}</td></tr>
+	</table>
+	{/form}
+{/block}
+</fieldset>
+{/block}
+{block scripts}
+{include parent}
+{/block}
+

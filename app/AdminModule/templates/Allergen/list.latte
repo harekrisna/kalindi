@@ -1,0 +1,25 @@
+{layout ../@layout.latte}
+{block title}Alergeny{/block}
+{block content}
+<h1>Alergeny</h1>
+<fieldset id="allergen-list">
+<legend>Alergeny:
+</legend>
+{foreach $allergens as $allergen}
+    <div>
+    	{$allergen->title}<a class="remove" n:href="removeAllergen!, $allergen->id"></a><a class="edit" n:href="editAllergen, $allergen->id"></a>
+    </div>
+{/foreach}
+</fieldset>
+<fieldset id="allergen-form">
+{block form}
+	<legend>Nový alergen:</legend>
+	{form allergenForm}
+	<table>
+		<tr><th>{label title /}</th><td>{input title}</td></tr>
+		<tr><th></th><td>{input insert}</td></tr>
+	</table>
+	{/form}
+{/block}
+</fieldset>
+{/block}

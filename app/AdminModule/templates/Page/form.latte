@@ -1,0 +1,23 @@
+{block title}O nás{/block}
+{block content}
+<fieldset id="page_form">
+	<legend>O nás:</legend>
+	{form pageForm}
+	<ul class="error" n:if="$form->hasErrors()">
+	        <li n:foreach="$form->errors as $error">{$error}</li>
+	</ul>
+	<table>
+		<tr><th>{label text /}</th><td>{input text}</td></tr>
+		<tr><th></th><td>{input update}</td></tr>
+	</table>
+	{/form}
+</fieldset>
+{/block}
+{block scripts}
+{include parent}
+    <script src="{$basePath}/js/jquery-ui.min.js"></script>
+    <script src="{$basePath}/js/ckeditor/ckeditor.js"></script>
+    <script>						
+		CKEDITOR.replace('frm-pageForm-text');	
+	</script>
+{/block}

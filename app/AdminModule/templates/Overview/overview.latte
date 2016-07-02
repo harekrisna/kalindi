@@ -1,0 +1,94 @@
+{layout ../@layout.latte}
+{block title}Přehledy{/block}
+{block left-column}
+<div id="paraler_paginator">
+	<a n:href="setYear, $year-1">&laquo; {$year-1}</a>
+	<a n:href="setYear, $year+1" style="float: right">{$year+1} &raquo;</a>
+	<hr />
+</div>
+<ul n:inner-foreach="$menu as $link => $month_number">
+	<li><a {if $month_number == $month}class="current"{/if} href="{$link}">{$months[$month_number]}</a></li>
+</ul>
+{/block}
+{block content}
+<h1>Objednávky: {$month_title} {$year}</h1>
+<div style="width: 1000px;" id="month_chart"></div>
+<fieldset id="list_settings">
+	<legend>Výpis:</legend>
+	<table>
+		<tr>
+			<th>Zobrazit:</th>
+			<td>
+				{ifCurrent fullList}Celkový přehled{else}<a n:href="setList, fullList">Celkový přehled</a>{/ifCurrent}
+				|
+				{ifCurrent groupList}Seskupení{else}<a n:href="setList, groupList">Seskupení</a>{/ifCurrent}</td>
+		</tr>
+		<tr>
+			<th>Seskupit podle:</th>
+			<td>
+				{if $group_by == "person_name"}Jména{else}<a n:href="setGroupBy, person_name">Jména</a>{/if}
+				|
+				{if $group_by == "address"}Adresy{else}<a n:href="setGroupBy, address">Adresy</a>{/if}
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<fieldset id="filter_settings">
+	<legend>Filtr:</legend>
+	{form filterForm}
+	<table>
+		<tr>
+			<th>{label person_name /}</th><td>{input person_name}</td>
+			<th>{label address, class => "address" /}</th><td>{input address}</td>
+			<th></th><td>{input filter}</td>
+		</tr>
+	</table>
+	{/form}
+</fieldset>
+{include tableList}
+<div class="backstop"></div>
+{/block}
+{block scripts}
+{include parent}
+<script src="{$basePath}/js/jquery.tablesorter.min.js"></script>
+<script>      
+	$(function(){
+		$('#group_list').tablesorter();
+	});
+</script>
+
+<script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }">
+</script>
+<script type="text/javascript">
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+	        ['Den', 'Počet'],
+	        {foreach $data_chart as $day => $lunch_count}
+				[{$day|date:'%d'}, {$lunch_count}],
+	        {/foreach}      
+        ]);
+
+        var options = {
+          title: 'Počty obědů',
+          legend: { position: 'none' },
+          chartArea: { width: '1000', left: '50'}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('month_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+{/block}
+
+

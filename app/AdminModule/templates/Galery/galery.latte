@@ -1,0 +1,153 @@
+{block title}Galerie{/block}
+{block head}
+{include parent}
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/uploadifive.css">
+{/block}
+{block content}
+<h1>Galerie</h1>
+<table id="galery_info">
+	<tr>
+		<th>Počet fotek v adresáři:</th><td id="images_dir_count">{$images_dir_count}</td>
+		<th>Adresář galerie:</th><td>{$basePath}/{$galery_dir}</td>
+	</tr>
+	<tr>
+		<th>Počet fotek v databázi:</th><td id="images_db_count">{$photos->count()}</td>
+		<td colspan="2"><button id="generate_photos">Generovat fotky z adresáře</button></td>
+	</tr>
+</table>
+<fieldset id="upload">
+    <legend>Nahrát fotky</legend>
+	<form>
+		<div id="queue"></div>
+		<input id="file_upload" name="file_upload" type="file" multiple="true">
+		<a id="upload_link" href="javascript:$('#file_upload').uploadifive('upload')">Nahrát na server</a>
+	</form>		
+</fieldset>
+<section id="galery_photos">
+    {foreach $photos as $photo}
+        {include photo-box.latte, photo => $photo}
+	{/foreach}
+</section>
+
+{/block}
+{block scripts}
+{include parent}
+  <script type="text/javascript" src="{$basePath}/js/nette.ajax.js"></script>
+  <script type="text/javascript" src="{$basePath}/js/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="{$basePath}/js/jquery.uploadifive.min.js"></script>
+  <script type="text/javascript">
+  	$('#generate_photos').click(function() {
+	  	window.location.href = {link generatePhotos};
+  	});
+  	
+  	$.widget("app.sortable", $.ui.sortable, {
+
+        // Adds the new "effects" option, turned off by default.
+        options: {
+            effects: false
+        },
+
+        // Called internally by sortable when sortable
+        // items are rearranged.
+        _rearrange: function ( e, item ) {
+            
+            // Don't do anything special if the "effects" option is turned
+            // off. Just call the original implementation of _rearrange().
+            if ( !this.options.effects ) {
+                return this._superApply( arguments ); 
+            }
+            
+            // Get the item we're running the effect on - it's the
+            // element that's moving as a result of dragging another
+            // element.
+            var $item = $( item.item[ 0 ] );
+
+            // Perform the effect by hiding the item, then calling the
+            // original implementation of _rearrange() which actually
+            // moves the item. Then we display it using a fade effect.            
+            $item.hide();
+            this._superApply( arguments );
+            $item.show( "fade", 325 );
+        }
+    });
+
+	$("#galery_photos").sortable({
+        handle: '.move',
+        cursor: 'move',
+        scroll: false,
+        effects: true,
+        placeholder: 'droppable-area',
+        update: function (event, ui) { 
+            $.get({link updatePosition!}, { "photo_id": $(ui.item).attr('id'),
+                                            "new_position": $(ui.item).index()+1}
+        )},
+    });
+  	
+	{? $timestamp = time()}
+	$(function() {
+		$('#file_upload').uploadifive({
+			'auto'             : false,
+			'formData'         : {
+								   'timestamp' : {$timestamp},
+								   'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
+			                     },
+			'queueID'          : 'queue',
+			'uploadScript'     : {link uploadFile!},
+			'onUploadComplete' : function(file, payload) { onUploadComplete(file, payload); }
+		});
+	});
+  	
+  	function onUploadComplete(file, payload) {
+        try {
+            payload = JSON.parse(payload);
+            photo = payload['photo'];
+            d = new Date();
+            
+            var container = $("#" + photo['id']);
+            container.find("span.dimensions").html(photo['width'] + 'x' + photo['height']);
+            container.find("div.info span").html(payload['filesize']);
+            container.find("img").attr("src", {$basePath} + "/" + payload['file_path'] + "?" + d.getTime());
+            container.addClass("refresh");
+            setTimeout(function(){
+                container.removeClass("refresh");
+            },2000);
+        }
+        catch (e) {
+            $('section#galery_photos').append(payload);
+            
+    		var info = $('table#galery_info');			
+    		var dir = info.find('td#images_dir_count');
+    		var db = info.find('td#images_db_count');
+    		dir.html(parseInt(dir.text()) + 1);
+    		db.html(parseInt(db.text()) + 1);
+        }   
+        
+  	}
+  	
+  	function removePhoto(event, a) {
+		event.preventDefault();
+		$.get(a.href, function(payload) {
+			if(payload.success) {
+				$(a).parent().animate({
+								height: 0,
+								width: 0,
+							}, function() {
+								this.remove();
+							});
+				
+				var info = $('table#galery_info');			
+				info.find('td#images_dir_count').html(payload.images_dir_count);
+				info.find('td#images_db_count').html(payload.images_db_count);
+				$('div.loading').fadeOut(400);
+			}
+		});
+	}
+
+function saveDescription(photo_id, text ) { 
+    $.get({link updateDescription!}, { "photo_id": photo_id,
+                                       "text": text }
+)};
+
+
+  </script>
+{/block}

@@ -1,0 +1,259 @@
+{block title}Objednávky {$date|date:'%d.%m.%Y'}{/block}
+{block head}
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui.css">
+	<style>
+		.ui-tooltip {
+			font-size: 13px;
+		}
+	</style>
+{/block}
+{block left-column}
+{var $days_cz = ['Monday' => "Po", 'Tuesday' => "Út", 'Wednesday' => "St", 'Thursday' => "Čt", 'Friday' => "Pá", 'Saturday' => 'So', 'Sunday' => 'Ne']}
+<div id="paraler_paginator">
+	<a n:href="setOffset, $offset-1">&laquo; {$previous}</a>
+	<a n:href="setOffset, $offset+1" style="float: right">{$next} &raquo;</a>
+	<hr />
+</div>
+<ul id="days_nav">
+{foreach $dates as $day}
+    {? $day_name = date("l", $day['timestamp'])}
+    <li>
+    {if $day_name == 'Saturday' || $day_name == 'Sunday'}
+    	<div class="weekend">{$day['timestamp']|date:'%d.%m.%Y'}<div>{$days_cz[$day_name]}(-)</div></div>
+    {else}
+	    <a n:href="list, $day['date']" n:class="$day['date'] == $date ? current">{$day['timestamp']|date:'%d.%m.%Y'}
+		    <div>{$days_cz[$day_name]}({$day['lunch_count'] == null ? 0 : $day['lunch_count']})</div>
+		</a>
+    {/if}
+    </li>
+{/foreach}
+</ul>
+{/block}
+{block content}
+<h1>Objednávky {$date|date:'%d.%m.%Y'} <nav id="sub_actions">(<a class="add-orders" n:href="addOrders">přidat objednávky</a></nav>)</h1>
+<table id="orders" class="view">
+    <thead>
+      	<tr>
+	        <th class="no-padding" style="width: 30px"><span>Počet</span></th>
+	        <th><span>Jméno</span></th>
+	        <th><span>Adresa</span></th>
+	        <th style="width: 15px;"></th>
+	        <th style="width: 75px;"><span>Telefon</span></th>
+	        <th style="width: 70px;"><span>Rozvoz</span></th>
+	        <th class="no-padding" style="width: 15px;"><span>P.</span></th>
+	        <th style="width: 85px;"><span>Čas</span></th>
+	        <th></th>
+		</tr>
+    </thead>
+    <tbody id="table_list">
+    {foreach $orders as $order}
+        <tr id="{$order->id}">
+            <td class="lunch_count"><div data-column="lunch_count">{$order->lunch_count}</div></td>
+            <td class="name"><div data-column="person_name">{$order->person_name}</div></td>
+            <td class="address"><div data-column="address">{$order->address}</div></td>
+            <td><a href="http://maps.google.com/?q={$order->address}" target="_blank"><img src="{$basePath}/images/admin/google-maps.png" /></a></td>
+            <td class="phone"><div data-column="phone">{$order->phone}</div></td>
+            <td>
+            	<span style="display: none;">{ifset $order->cartage->cartage_name}{$order->cartage->abbreviation}{else}ŽŽ{/ifset}</span>
+                <select name="cartages[{$order->id}]">
+                    <option value=""></option> 
+                    {foreach $cartages as $cartage}
+                        <option{if $order->cartage_id == $cartage->id} selected="selected"{/if} value="{$cartage->id}">{$cartage->abbreviation}</option> 
+                    {/foreach}
+                </select>
+            </td>
+            <td><img n:if="$order->note != ''" title="{$order->note}" class="icon help" src="{$basePath}/images/admin/note-icon.png" /></td>
+            <td>{$order->time_created|date:'%d.%m %H:%M:%S'}</td>
+            <td><a class="remove" n:href="deleteOrder!, $order->id"></a></td>
+        </tr>        
+    {/foreach}
+    </tbody>
+
+	{form insertOrderForm}
+		<tr id="insert_order">
+			<td>{input lunch_count}</td>
+			<td>{input person_name, class => person_name}</td>
+			<td>{input address}</td>
+			<td></td>
+			<td>{input phone}</td>
+			<td>{input cartage_id}</td>
+			<td></td>
+			<td id="actual_time"></td>
+			<td>{input insert}</td>
+		</tr>
+	    <tr class="sum_row">
+		    <td style="width: 20px;" id="lunch_sum">{$orders->sum("lunch_count")}</td>
+	    	<td id="print_preview" colspan="9">
+	    		<input n:if="$orders->sum('lunch_count') > 0" type="button" value="Náhled pro tisk" />
+	    	</td>
+	    </tr>
+	{/form}
+  </table>
+<div class="backstop"></div>
+{/block}
+{block scripts}
+{include parent}
+  <script src="{$basePath}/js/jquery.tablesorter.min.js"></script>
+  <script src="{$basePath}/js/jquery-ui.min.js"></script>
+  <script>      
+  $(function(){
+    $('#orders').tablesorter(); 
+
+    $('#table_list select[name^=zones]').change(function() {
+        var order_id = parseInt(this.name.match(/\d+/));
+        var zone_id = $(this).val();
+        $.get({link changeZone!}, { "order_id": order_id,
+        						 	"zone_id": zone_id },
+		function (payload) {
+         	if(payload['success']) {
+		        $('div.loading').fadeOut(400);
+         	}
+		});
+    });
+
+    $('#table_list select[name^=cartages]').change(function() {
+        var order_id = parseInt(this.name.match(/\d+/));
+        var cartage_id = $(this).val();
+        $.get({link changeCartage!}, { "order_id": order_id,
+        				   			   "cartage_id": cartage_id },
+		function (payload) {
+         	if(payload['success']) {
+		        $('div.loading').fadeOut(400);
+         	}
+		});
+    });
+    
+	var last_open_td = "undefined";    
+    var last_open_td_value = "undefined";
+	
+	function bindEditFieldEvent(td) {
+		$(td).find('div').click(function() {		
+			if(last_open_td != "undefined") {
+		    	$(last_open_td).html(last_open_td_value);
+  		    	bindEditFieldEvent(last_open_td);
+			}
+			
+			last_open_td = $(this).parent();
+			last_open_td_value = $(this).parent().html();
+			
+			var parent = $(this).parent();
+		    var column = $(this).data('column');
+		    var value = $(this).html();
+		    var input = '<input type="text" name="value" value="' + value + '" /><input name="submit" type="submit" value="OK" />';
+		    
+		    $(this).replaceWith('<form id="edit_field_form" name="'+column+'" method="post" action="'+{link editField!}+'" novalidate="">'+input+'</form>');
+		    
+		    var input = parent.find("input[type=text]");
+		    input.focus();
+		    var tmp = input.val();
+		    input.val('');
+		    input.val(tmp);
+		    
+		    $(document).keyup(function(event) {
+				if (event.keyCode == 27) { 
+					$(last_open_td).html(last_open_td_value);
+					bindEditFieldEvent(last_open_td);
+					
+					last_open_td = "undefined";    
+					last_open_td_value = "undefined";
+				}
+			});
+		});
+	}
+    
+    $('#orders tr td').each(function(index) {
+		bindEditFieldEvent(this);
+	});
+
+	$(document).on('submit','#edit_field_form',function(){
+		var column = $(this).attr('name');
+		var id = $(this).parent().parent().attr('id');
+		var value = $("#edit_field_form").serialize();;
+		var url = $(this).attr('action');
+		var data = "order_id="+id+"&column="+column+"&"+value;
+		var input = $(this).find('input[name=value]');
+
+		$('div.loading').fadeIn(300);
+		input.addClass('field-loading');
+		
+		$.post(url, data, function(payload) {
+			if(payload['success']) {
+				$(last_open_td).html('<div data-column="'+ column +'">'+ payload["value"] +'</div>');
+ 		    	bindEditFieldEvent(last_open_td);
+ 		    	
+ 		    	console.log(payload);
+ 		    	if(payload['lunch_sum'] != "undefined"){
+	 		    	$('#lunch_sum').html(payload['lunch_sum']);
+ 		    	}
+ 		    		
+				last_open_td = "undefined";    
+				last_open_td_value = "undefined";
+  		    	$('div.loading').fadeOut(400);
+			}
+		});
+		
+		return false;
+	});    
+	
+	$('a.remove').click(function (event) {
+	     event.preventDefault();	
+	     if (window.confirm("Opravdu smazat?") !== false) {
+	     	$('div.loading').fadeIn(300);
+		 	$(this).addClass('remove-loading');
+		    
+		    var a = this;
+		    var order_id = $(this).parent().parent().attr('id');
+		    
+		    $.get({link deleteOrder!}, { "order_id": order_id}, function (payload) {
+	         	if(payload['success']) {
+					var row = $(a).parent().parent();
+					
+					row.children('td, th').hide(120);
+					row.animate({
+							height: 0
+					}, function() {
+						this.remove();
+						if(payload['lunch_sum'] != "undefined")	{
+							$('#lunch_sum').html(payload['lunch_sum']);
+						}
+					});
+					
+			        $('div.loading').fadeOut(400);	
+				}
+			});
+		 }
+	});
+		
+		
+    function zeroPad(num, places) {
+		var zero = places - num.toString().length + 1;
+		return Array(+(zero > 0 && zero)).join("0") + num;
+	}
+	
+	function updateTime() {
+		var date = new Date(); 
+		var datetime = zeroPad(date.getDate(), 2) + "." + zeroPad(date.getMonth()+1, 2) + " " + zeroPad(date.getHours(), 2) + ":" + zeroPad(date.getMinutes(), 2) + ":" + zeroPad(date.getSeconds(), 2);
+            
+		$("tr#insert_order td#actual_time").html(datetime);
+		
+		setTimeout(function(){
+			updateTime();    
+		}, 1000);
+	}
+	
+	updateTime();
+    
+    $('#print_preview input').click(function() {
+		window.open({link printout, $date}, 'Náhled pro tisk', 'width=900, height=700, scrollbars=yes').focus();
+    })
+    
+    
+  });
+  
+	$(document).tooltip({
+		position: { my: "left+22 bottom+4"}
+	});
+	
+	
+  </script>
+{/block}

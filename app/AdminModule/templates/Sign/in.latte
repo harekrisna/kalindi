@@ -1,0 +1,27 @@
+{block title}Sign in{/block}
+{block #content}
+{form signInForm}
+<div class="login_legend"><img src="{$basePath}/favicon.ico" style="margin: 0px 5px 0px 43px;" >Přihlášení</div>
+<fieldset class="sign-in-form">
+    {control $form errors}
+    <table>
+    <tr>
+      <td>{label username /}</td>
+      <td>{input username}</td>
+    </tr>
+    <tr>
+      <td>{label password /}</td>
+      <td>{input password}</td>
+    <!--
+    <div class="pair">
+        <div class="input">{input remember} {label remember /}</div>
+    </div>
+    -->
+    </tr>
+    <tr>
+      <td></td>
+      <td>{input send}</td>
+    </tr>
+    </table>
+</fieldset>
+{/form}

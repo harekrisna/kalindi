@@ -1,0 +1,51 @@
+{block title}Adresy rozvozů{/block}
+{block left-column}
+{/block}
+{block content}
+<h1>Adresy rozvozů</h1>
+<table id="addresses" class="view" cellspacing="0" cellpadding="0">
+    <thead>
+      <tr>
+        <th><span>Adresa</span></th>
+        <th style="width: 70px"><span>Default rozvoz</span></th>
+      </tr>
+    </thead>
+    <tbody>
+	{foreach $addresses as $address}
+        <tr>
+            <td>{$address['address']}</td>
+            <td><span style="display: none;">{ifset $address->cartage->cartage_name}{$address->cartage->abbreviation}{else}ŽŽ{/ifset}</span>
+                <select name="cartages[{$address['id']}]">
+                    <option value=""></option> 
+                    {foreach $cartages as $cartage}
+                        <option{if $address['cartage_id'] == $cartage->id} selected="selected"{/if} value="{$cartage->id}">{$cartage->abbreviation}</option> 
+                    {/foreach}
+                </select>
+            </td>
+        </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+{/block}
+{block scripts}
+{include parent}
+  <script src="{$basePath}/js/jquery.tablesorter.min.js"></script>
+  <script>      
+  $(function(){
+    $('#addresses').tablesorter(); 
+
+    $('select[name^=zones]').change(function() {
+        $.get({link setZone!}, { "address_id": parseInt(this.name.match(/\d+/)),
+                                 "zone_id": $(this).val() });
+    });
+
+    $('select[name^=cartages]').change(function() {
+        $.get({link setCartage!}, { "address_id": parseInt(this.name.match(/\d+/)),
+                                    "cartage_id": $(this).val() });
+    });
+  });
+  </script>
+
+{/block}
+

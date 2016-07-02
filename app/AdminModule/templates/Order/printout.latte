@@ -1,0 +1,136 @@
+{block title}Náhled objednávek pro tisk{/block}
+{block content}
+{var payment_trans = array("hotově" => "cash",
+						   "na účet" => "účet",
+						   "fakturou" => "fa",	
+						  )}
+<style type="text/css">
+@page {
+  size: auto;   /* auto is the initial value */
+  margin: 45px 20px 65px 20px;
+}
+
+body{
+  -webkit-print-color-adjust:exact;
+}
+
+table.printout {
+	border-collapse: collapse;
+	width: 800px;
+	margin: 0 auto;
+}
+
+.printout tr {
+	cursor: move;
+}
+
+.printout tr td {
+	border: 1px black solid;	
+}
+
+.printout tr:nth-child(even) td {
+	background-color: #DEDEDE;	
+}
+
+.printout tr.last td {
+	background-color: #FFFFFF;	
+	border: 0px; 
+	text-align:center; 
+	font-weight: bold;
+}
+
+.printout tr td:nth-child(1), .printout tr td:nth-child(3), .printout tr td:nth-child(4), .printout tr td:nth-child(6), .printout tr td:nth-child(7) {
+	text-align: center;
+}
+
+.printout tr td:nth-child(2), .printout tr td:nth-child(5){
+	padding-left: 5px;
+}
+
+
+.ui-sortable-helper {
+	width: 800px !important;
+}
+
+.ui-sortable-helper td{
+	background-color: rgba(253,255,97,0.5) !important;
+}
+
+.ui-sortable-helper td:nth-child(1) {
+	width: 29px; 
+}
+
+.ui-sortable-helper td:nth-child(2) {
+	width: 225px; 
+}
+
+.ui-sortable-helper td:nth-child(3) {
+	width: 29px; 
+}
+
+.ui-sortable-helper td:nth-child(4) {
+	width: 100px; 
+}
+
+.ui-sortable-helper td:nth-child(5) {
+	width: 358px; 
+}
+
+.ui-sortable-helper td:nth-child(6) {
+	width: 300px; 
+}
+
+.ui-sortable-helper td:nth-child(7) {
+	width: 48px; 
+}
+
+</style>
+{foreach $cartages as $cartage}
+	{continueIf $cartage->count() == 0}
+<table class="printout">
+<thead>
+	<tr>
+		<th>Poč</th>
+		<th>Jméno</th>
+		<th>Poč</th>
+		<th>Telefon</th>
+		<th>Adresa</th>
+		<th>Pozn.</th>
+		<th>Roz</th>
+	</tr>
+</thead>
+<tbody>
+{foreach $cartage as $order}
+	<tr>
+		<td>{$order->lunch_count}</td>
+		<td>{$order->person_name}</td>
+		<td>{$order->lunch_count}</td>
+	    <td>{$order->phone}</td>
+		<td>{$order->address}</td>
+		<td>{$order->note}</td>
+		<td>{if $order->cartage_id}{$order->cartage->abbreviation}{/if}</td>
+	</tr>
+{/foreach}
+</tbody>
+<tr class="last">
+	<td>{$cartage->sum("lunch_count")}</td>
+	<td colspan="7"></td>
+</tr>
+</table>
+{if !$iterator->last}<div class="padding-resizer"></div>{/if}
+{/foreach}
+<div id="lunch_sum">Celkem obědů: {$lunch_sum}</div>
+<div style="text-align: center;">
+<input type="button" id="print_button" onClick="window.print()" value="Tisk" />
+</div>
+  <script>      
+  
+  $(function(){
+	  $(".printout tbody").sortable();
+  });
+  
+  </script>
+{/block}  
+
+
+

@@ -1,0 +1,123 @@
+{block title}{$title}{/block}
+{block content}
+<section id="order">
+	{if $show_next_week}
+	<div class="week-navigation">
+        <div id="previous" n:class="button, $start_slide == 0 ? actual"></div>
+	    <div n:class="triangle, $start_slide ? triangle-right : triangle-left"></div> 
+		<div id="next" n:class="button, $start_slide == 1 ? actual"></div>
+	</div>
+    {else}
+	    <h1>{$week_title}</h1>
+    {/if}
+    
+    {form orderForm}
+	<ul id="order_container">
+		<li>
+			<table id="order-table" class="order-table">
+                <tr n:foreach="$lunch as $day">
+                    <td class="day-circle"><div n:class="$today == $iterator->counter ? today">{$day['abbr']}</div></td>
+                    <td>
+                    {if $day['nocook']}
+                        <span class="nocook">nevaříme</span>
+                    {else}
+                        <ul>
+                        {foreach $day['preparation'] as $position => $preparation}
+                            {var allergens = "Žádné alergeny"}
+                            {foreach $day['allergens'][$position] as $allergen}
+                                {first}
+                                    {var allergens = "Alergeny: ".$allergen}
+                                {else}
+                                    {var allergens .= ", ".$allergen}
+                                {/first}
+                            {/foreach}
+                            <li n:tag-if="$preparation != ''" title="{$allergens}">{$preparation}</li>
+                        {/foreach}
+                        </ul>
+                    {/if}
+                    </td>              
+                    <td class="count">   
+                    {if $day['disabled'] && !$day['nocook']}
+                        <div class="cross">ukončeno</div>
+                    {elseif !$day['nocook']}
+                        <div class="count-text">počet porcí</div>
+                        {input "{$week}_week-{$day['name']}"}<div class="arrow-increase"></div><div class="arrow-decrease"></div>
+                        <div class="price"><span>0</span>,- Kč</div>
+                    {/if}
+                    </td>
+                </tr>
+			</table>
+		</li>
+		<li n:if="$show_next_week">
+			<table id="order-table-next" class="order-table">
+                <tr n:foreach="$lunch_next_week as $day">
+                    <td class="day-circle"><div>{$day['abbr']}</div></td>
+                    <td>
+                    {if $day['nocook']}
+                        <span class="nocook">nevaříme</span>
+                    {else}
+                        <ul>
+                        {foreach $day['preparation'] as $position => $preparation}
+                            {var allergens = "Žádné alergeny"}
+                            {foreach $day['allergens'][$position] as $allergen}
+                                {first}
+                                    {var allergens = "Alergeny: ".$allergen}
+                                {else}
+                                    {var allergens .= ", ".$allergen}
+                                {/first}
+                            {/foreach}
+                            <li n:tag-if="$preparation != ''" title="{$allergens}">{$preparation}</li>
+                        {/foreach}
+                        </ul>
+                    {/if}
+                    </td>              
+                    <td class="count">      
+                    {if !$day['nocook']}
+                        <div class="count-text">počet porcí</div>
+                        {input "next_week-{$day['name']}"}<div class="arrow-increase"></div><div class="arrow-decrease"></div>
+                        <div class="price"><span>0</span>,- Kč</div>
+                    {/if}
+                    </td>
+                </tr>
+			</table>
+		</li>
+	</ul>
+	<div id="order_form_container">
+		<div id="order-title">Vaše objednávka</div>
+		<div id="sum">
+            <div id="text">Cena celkem</div>
+            <div id="label"><span id="sum-price">0</span>,-</div>
+        </div>
+		<div>{input surname}{input address }{input phone }{input email }{input note, style => "font-size: 14px" }</div>
+		{input remember_me}{label remember_me }{/label}
+        {input $submit_button}
+	</div>
+	{/form}
+{* <p class="announcement">Vážení zákazníci, drazí přátelé a příznivci, moc se omlouváme, ale z důvodu nucené zdravotní dovolené budeme mimo provoz až do středy 27. 4. 2016. Odkládali jsme to jak se dalo, hledali náhradní řešení, ale bohužel to jinak nejde.<br /><br />
+Rozvážet začneme opět od čtvrtka 28.4. 2016.<br /><br />
+Děkujeme za pochopení.</p> *}
+</section>
+{*<div id="allergen_info">Pro informace o alergenech podržte kurzor myši nad řádkem s daným pokrmem.</div>*}
+<div id="footnote">
+Rozvážíme v lokalitách <span class="highlight">Prostějov</span>, <span class="highlight">Mostkovice</span> a <span class="highlight">Plumlov</span>.<br /> 
+Rozvoz do jiných lokalit je možný po předchozí domluvě.<br />
+Objednávku na týž den je možné provést nejpozději do 8:00.<br />
+Cena jedné porce je 90 Kč. Ukázky denního menu můžete vidět v naší galerii.
+</div>
+{/block}
+{block scripts}
+	<script src="{$basePath}/js/jquery.min.js"></script>
+	<script src="{$basePath}/js/jquery-ui.min.js"></script>
+	<script src="{$basePath}/js/netteForms.min.js"></script>
+	<script src="{$basePath}/js/jquery.bxSlider.min.js"></script>
+	<script src="{$basePath}/js/main.js"></script>	
+	<script src="{$basePath}/js/orderForm.js"></script>
+	<script>
+	$(document).tooltip({
+		position: { my: "left top"}
+	});
+	
+
+	</script>
+	
+{/block}

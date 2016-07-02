@@ -1,0 +1,38 @@
+{block title}Nová galerie{/block}
+{block content}
+<fieldset id="galery_form">
+	<legend>{$form_title}</legend>
+	{form galeryForm}
+	<ul class="error" n:if="$form->hasErrors()">
+	        <li n:foreach="$form->errors as $error">{$error}</li>
+	</ul>
+	<table>
+	<tr><th>{label title /}</th><td>{input title}</td></tr>
+	<tr><th>{label galery_image /}</th><td>{input galery_image}</td></tr>
+	<tr><th>{label description /}</th><td>{input description}</td></tr>
+	<tr><th><label>Datum:</label></th><td>{input day }{input month}{input year}</td></tr>
+	<tr><th>{label photos_folder /}</th><td>{input photos_folder}</td></tr>
+	<tr><th>{label url /}</th><td>{input url}</td></tr>
+	<tr><th></th><td>{input insert}</td></tr>
+	</table>
+	{/form}
+</fieldset>
+{/block}
+{block scripts}
+{include parent}
+<script type='text/javascript' src="{$basePath}/js/admin.js"></script>
+<script>
+    $("input[name=title]").keyup(function() {
+	    $("input[name=photos_folder]").val(stringToNiceURL(this.value));
+	    $("input[name=url]").val(stringToNiceURL(this.value));
+    });    
+    
+    $("input[name=photos_folder]").keyup(function() {
+	    $("input[name=photos_folder]").val(stringToNiceURL(this.value));
+    });
+    
+    $("input[name=url]").keyup(function() {
+	    $("input[name=url]").val(stringToNiceURL(this.value));
+    });
+</script>
+{/block}

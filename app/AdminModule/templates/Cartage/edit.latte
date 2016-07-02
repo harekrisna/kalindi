@@ -1,0 +1,12 @@
+{extends list.latte}
+{block title}Editace rozvozce{/block}
+{block form}
+	<legend>Editace rozvozce:</legend>
+	{form cartageForm}
+	<table>
+		<tr><th>{label data-cartage_name /}</th><td>{input data-cartage_name}</td></tr>
+		<tr><th>{label data-abbreviation /}</th><td>{input data-abbreviation}</td></tr>
+		<tr><th></th><td>{input update}</td></tr>
+	</table>
+	{/form}
+{/block}

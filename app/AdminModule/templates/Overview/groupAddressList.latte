@@ -1,0 +1,23 @@
+{extends overview.latte}
+{block tableList}
+<table id="group_list" class="view">
+    <thead>
+      <tr>
+        <th style="width: 400px;"><span>Jméno</span></th>
+        <th><span>Adresa</span></th>
+        <th style="width: 100px"><span>Email</span></th>
+        <th style="width: 30px"><span>Počet</span></th>
+      </tr>
+    </thead>
+    <tbody id="table_list">
+    {foreach $orders as $order}
+        <tr id="{$order['id']}">
+            <td n:inner-foreach="$order['itemize'] as $item">{$item->person_name|truncate:50}{sep}<br />{/sep}</td>
+            <td>{$order['address']|truncate:50}</td>
+            <td n:inner-foreach="$order['itemize'] as $item">{$item->email}{sep}<br />{/sep}</td>
+            <td>{$order['lc']}</td>
+        </tr>        
+    {/foreach}
+    </tbody>
+</table>
+{/block}

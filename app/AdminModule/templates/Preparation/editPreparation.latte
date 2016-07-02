@@ -1,0 +1,21 @@
+{extends list.latte}
+{block title}Editace preparace{/block}
+{block form}
+	{form preparationForm}
+		<fieldset id="new-preparation">
+		<legend>Editace preparace:</legend>
+		<table>
+		<tr><th>{label title /}</th><td>{input title}</td></tr>
+		<tr><th></th><td>{input update}</td></tr>
+		</table>
+		</fieldset>
+		<fieldset id="allergen-form" class="chcekboxlist-form">
+		<legend>{label allergens /}</legend>
+			{input allergens}
+		</fieldset>
+		<fieldset id="categories-form" class="chcekboxlist-form">
+		<legend>{label categories /}</legend>
+			{input categories}
+		</fieldset>
+	{/form}
+{/block}
