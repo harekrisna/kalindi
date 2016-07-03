@@ -5,10 +5,12 @@
     <link rel="stylesheet" href="{$basePath}/css/photoswipe/default-skin/default-skin.css"> 
 {/block}
 {block content}
-<div id="gallery" n:inner-foreach="$photos as $photo">
-	<a href="{$basePath}/galery/photos/{$photo->file}">
-		<img src="{$basePath}/galery/thumbs/{$photo->file}" data-size="{$photo->width}x{$photo->height}" alt="{$photo->description}" />
-	</a>
+<div class="galery-wrapper">
+	<div id="gallery" n:inner-foreach="$photos as $photo">
+		<a href="{$basePath}/galery/photos/{$photo->file}">
+			<img src="{$basePath}/galery/thumbs/{$photo->file}" data-size="{$photo->width}x{$photo->height}" alt="{$photo->description}" />
+		</a>
+	</div>
 </div>
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
@@ -44,6 +46,7 @@
         </div>
     </div>
 </div>
+
 {/block}
 {block scripts}
 {include parent}

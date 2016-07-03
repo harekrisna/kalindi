@@ -181,11 +181,16 @@ class OrderPresenter extends BasePresenter   {
         $this_week_amount = 0;
         $next_week_amount = 0;
 
+		// test zda byl formulář vygenerován před dedlineam a potvrzen po deadlinu
 		$deadline_time = strtotime($this->time_deadline);
 		$generated_time = $values->timestamp;
 		$actual_time = time();
-
-		if(($deadline_time < $actual_time) && ($deadline_time > $generated_time)) {
+		
+		// test zda byl formulář vygenerovám ve stejný týdem, chyba nastávala když byl formulář vygenerován v neděli a potvrzev v pondělí
+		$generated_week = date("W", $generated_time);
+		$actual_week = date("W", $actual_time);
+	
+		if((($deadline_time < $actual_time) && ($deadline_time > $generated_time)) || ($generated_week != $actual_week)) {
 	        $this->flashMessage('Platnost formuláře vypršela.<br />Vaše objednávka nebyla zpracována!', 'error');
 	        
 	        if($form['send_from_order']->isSubmittedBy())
