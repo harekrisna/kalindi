@@ -45,7 +45,7 @@ class SignFormFactory extends Nette\Object
 		if ($values->remember) {
 			$this->user->setExpiration('14 days', FALSE);
 		} else {
-			$this->user->setExpiration('20 minutes', TRUE);
+			$this->user->setExpiration('60 minutes', TRUE);
 		}
 
 		try {
