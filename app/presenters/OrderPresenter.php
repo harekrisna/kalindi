@@ -134,6 +134,9 @@ class OrderPresenter extends BasePresenter   {
 			 ->addCondition($form::FILLED)
 			  	 ->addRule(Form::EMAIL, 'Zadejte platnou emailovou adresu');
 		
+		$form->addText('workemail', 'Work email:', 30, 255)
+			 ->addRule(~$form::FILLED, "Toto pole musí zůstat prázdné.");
+		
 		$form->addText('note', 'Vaše poznámka:', 30)
 			 ->setEmptyValue('Vaše poznámka');
 		
